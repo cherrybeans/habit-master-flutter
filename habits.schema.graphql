@@ -1,0 +1,88 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type CreateHabit {
+    habit: HabitType
+}
+
+type DeleteHabit {
+    habit: HabitType
+}
+
+type HabitType {
+    "I will ..."
+    behavior: String!
+    "Celebrate by ..."
+    celebration: String!
+    celebrationString: String
+    "The color coding of the habit to let you group them."
+    color: HabitsHabitColorChoices!
+    habitString: String
+    id: ID!
+    "After I ..."
+    prompt: String!
+    "The habit status indicates to what degree the behavior is integrated into your life."
+    status: HabitsHabitStatusChoices!
+}
+
+type Mutation {
+    createHabit(habitData: HabitInput!): CreateHabit
+    deleteHabit(id: ID): DeleteHabit
+    updateHabit(habitData: HabitInput!): UpdateHabit
+}
+
+type Query {
+    allHabits: [HabitType]
+    habit(habitId: Int): HabitType
+}
+
+type UpdateHabit {
+    habit: HabitType
+}
+
+"An enumeration."
+enum HabitsHabitColorChoices {
+    "Blue"
+    BLUE
+    "Gray"
+    GRAY
+    "Green"
+    GREEN
+    "Indigo"
+    INDIGO
+    "Light-blue"
+    LIGHTBLUE
+    "Orange"
+    ORANGE
+    "Pink"
+    PINK
+    "Red"
+    RED
+    "Violet"
+    VIOLET
+    "Yellow"
+    YELLOW
+}
+
+"An enumeration."
+enum HabitsHabitStatusChoices {
+    "Focused"
+    FOCUSED
+    "Not active"
+    INACTIVE
+    "Integrated"
+    INTEGRATED
+    "Slipping"
+    REWORK
+}
+
+input HabitInput {
+    behavior: String
+    celebration: String
+    id: ID
+    prompt: String
+}

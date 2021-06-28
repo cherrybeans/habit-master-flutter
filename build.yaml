@@ -1,0 +1,14 @@
+targets:
+  $default:
+    sources:
+      - lib/**
+      - graphql/**
+      - habits.schema.graphql
+      - $package$
+    builders:
+      artemis:
+        options:
+          schema_mapping:
+            - schema: habits.schema.graphql
+              queries_glob: graphql/*.graphql
+              output: lib/graphql/habits_graphql_api.dart
