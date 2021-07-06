@@ -10,72 +10,22 @@ part of 'habits_graphql_api.graphql.dart';
 AllHabits$Query$HabitType _$AllHabits$Query$HabitTypeFromJson(
     Map<String, dynamic> json) {
   return AllHabits$Query$HabitType()
+    ..$$typename = json['__typename'] as String?
     ..id = json['id'] as String
-    ..habitString = json['habitString'] as String?
-    ..celebrationString = json['celebrationString'] as String?
-    ..color = _$enumDecode(_$HabitsHabitColorChoicesEnumMap, json['color'],
-        unknownValue: HabitsHabitColorChoices.artemisUnknown)
-    ..status = _$enumDecode(_$HabitsHabitStatusChoicesEnumMap, json['status'],
-        unknownValue: HabitsHabitStatusChoices.artemisUnknown);
+    ..prompt = json['prompt'] as String
+    ..behavior = json['behavior'] as String
+    ..celebration = json['celebration'] as String;
 }
 
 Map<String, dynamic> _$AllHabits$Query$HabitTypeToJson(
         AllHabits$Query$HabitType instance) =>
     <String, dynamic>{
+      '__typename': instance.$$typename,
       'id': instance.id,
-      'habitString': instance.habitString,
-      'celebrationString': instance.celebrationString,
-      'color': _$HabitsHabitColorChoicesEnumMap[instance.color],
-      'status': _$HabitsHabitStatusChoicesEnumMap[instance.status],
+      'prompt': instance.prompt,
+      'behavior': instance.behavior,
+      'celebration': instance.celebration,
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
-
-const _$HabitsHabitColorChoicesEnumMap = {
-  HabitsHabitColorChoices.blue: 'BLUE',
-  HabitsHabitColorChoices.gray: 'GRAY',
-  HabitsHabitColorChoices.green: 'GREEN',
-  HabitsHabitColorChoices.indigo: 'INDIGO',
-  HabitsHabitColorChoices.lightblue: 'LIGHTBLUE',
-  HabitsHabitColorChoices.orange: 'ORANGE',
-  HabitsHabitColorChoices.pink: 'PINK',
-  HabitsHabitColorChoices.red: 'RED',
-  HabitsHabitColorChoices.violet: 'VIOLET',
-  HabitsHabitColorChoices.yellow: 'YELLOW',
-  HabitsHabitColorChoices.artemisUnknown: 'ARTEMIS_UNKNOWN',
-};
-
-const _$HabitsHabitStatusChoicesEnumMap = {
-  HabitsHabitStatusChoices.focused: 'FOCUSED',
-  HabitsHabitStatusChoices.inactive: 'INACTIVE',
-  HabitsHabitStatusChoices.integrated: 'INTEGRATED',
-  HabitsHabitStatusChoices.rework: 'REWORK',
-  HabitsHabitStatusChoices.artemisUnknown: 'ARTEMIS_UNKNOWN',
-};
 
 AllHabits$Query _$AllHabits$QueryFromJson(Map<String, dynamic> json) {
   return AllHabits$Query()
@@ -95,15 +45,21 @@ CreateHabit$Mutation$CreateHabit$HabitType
     _$CreateHabit$Mutation$CreateHabit$HabitTypeFromJson(
         Map<String, dynamic> json) {
   return CreateHabit$Mutation$CreateHabit$HabitType()
-    ..habitString = json['habitString'] as String?
-    ..celebrationString = json['celebrationString'] as String?;
+    ..$$typename = json['__typename'] as String?
+    ..id = json['id'] as String
+    ..prompt = json['prompt'] as String
+    ..behavior = json['behavior'] as String
+    ..celebration = json['celebration'] as String;
 }
 
 Map<String, dynamic> _$CreateHabit$Mutation$CreateHabit$HabitTypeToJson(
         CreateHabit$Mutation$CreateHabit$HabitType instance) =>
     <String, dynamic>{
-      'habitString': instance.habitString,
-      'celebrationString': instance.celebrationString,
+      '__typename': instance.$$typename,
+      'id': instance.id,
+      'prompt': instance.prompt,
+      'behavior': instance.behavior,
+      'celebration': instance.celebration,
     };
 
 CreateHabit$Mutation$CreateHabit _$CreateHabit$Mutation$CreateHabitFromJson(
@@ -135,6 +91,55 @@ Map<String, dynamic> _$CreateHabit$MutationToJson(
       'createHabit': instance.createHabit?.toJson(),
     };
 
+EditHabit$Mutation$UpdateHabit$HabitType
+    _$EditHabit$Mutation$UpdateHabit$HabitTypeFromJson(
+        Map<String, dynamic> json) {
+  return EditHabit$Mutation$UpdateHabit$HabitType()
+    ..$$typename = json['__typename'] as String?
+    ..id = json['id'] as String
+    ..prompt = json['prompt'] as String
+    ..behavior = json['behavior'] as String
+    ..celebration = json['celebration'] as String;
+}
+
+Map<String, dynamic> _$EditHabit$Mutation$UpdateHabit$HabitTypeToJson(
+        EditHabit$Mutation$UpdateHabit$HabitType instance) =>
+    <String, dynamic>{
+      '__typename': instance.$$typename,
+      'id': instance.id,
+      'prompt': instance.prompt,
+      'behavior': instance.behavior,
+      'celebration': instance.celebration,
+    };
+
+EditHabit$Mutation$UpdateHabit _$EditHabit$Mutation$UpdateHabitFromJson(
+    Map<String, dynamic> json) {
+  return EditHabit$Mutation$UpdateHabit()
+    ..habit = json['habit'] == null
+        ? null
+        : EditHabit$Mutation$UpdateHabit$HabitType.fromJson(
+            json['habit'] as Map<String, dynamic>);
+}
+
+Map<String, dynamic> _$EditHabit$Mutation$UpdateHabitToJson(
+        EditHabit$Mutation$UpdateHabit instance) =>
+    <String, dynamic>{
+      'habit': instance.habit?.toJson(),
+    };
+
+EditHabit$Mutation _$EditHabit$MutationFromJson(Map<String, dynamic> json) {
+  return EditHabit$Mutation()
+    ..updateHabit = json['updateHabit'] == null
+        ? null
+        : EditHabit$Mutation$UpdateHabit.fromJson(
+            json['updateHabit'] as Map<String, dynamic>);
+}
+
+Map<String, dynamic> _$EditHabit$MutationToJson(EditHabit$Mutation instance) =>
+    <String, dynamic>{
+      'updateHabit': instance.updateHabit?.toJson(),
+    };
+
 CreateHabitArguments _$CreateHabitArgumentsFromJson(Map<String, dynamic> json) {
   return CreateHabitArguments(
     prompt: json['prompt'] as String,
@@ -146,6 +151,23 @@ CreateHabitArguments _$CreateHabitArgumentsFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$CreateHabitArgumentsToJson(
         CreateHabitArguments instance) =>
     <String, dynamic>{
+      'prompt': instance.prompt,
+      'behavior': instance.behavior,
+      'celebration': instance.celebration,
+    };
+
+EditHabitArguments _$EditHabitArgumentsFromJson(Map<String, dynamic> json) {
+  return EditHabitArguments(
+    id: json['id'] as String,
+    prompt: json['prompt'] as String,
+    behavior: json['behavior'] as String,
+    celebration: json['celebration'] as String,
+  );
+}
+
+Map<String, dynamic> _$EditHabitArgumentsToJson(EditHabitArguments instance) =>
+    <String, dynamic>{
+      'id': instance.id,
       'prompt': instance.prompt,
       'behavior': instance.behavior,
       'celebration': instance.celebration,

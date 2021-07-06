@@ -1,9 +1,9 @@
 query AllHabits {
     allHabits {
+        __typename
         id
-        habitString
-        celebrationString
-        color
-        status
+        prompt
+        behavior
+        celebration
     }
 }

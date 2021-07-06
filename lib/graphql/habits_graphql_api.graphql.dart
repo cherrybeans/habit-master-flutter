@@ -14,21 +14,19 @@ class AllHabits$Query$HabitType extends JsonSerializable with EquatableMixin {
   factory AllHabits$Query$HabitType.fromJson(Map<String, dynamic> json) =>
       _$AllHabits$Query$HabitTypeFromJson(json);
 
+  @JsonKey(name: '__typename')
+  String? $$typename;
+
   late String id;
 
-  String? habitString;
+  late String prompt;
 
-  String? celebrationString;
+  late String behavior;
 
-  @JsonKey(unknownEnumValue: HabitsHabitColorChoices.artemisUnknown)
-  late HabitsHabitColorChoices color;
-
-  @JsonKey(unknownEnumValue: HabitsHabitStatusChoices.artemisUnknown)
-  late HabitsHabitStatusChoices status;
+  late String celebration;
 
   @override
-  List<Object?> get props =>
-      [id, habitString, celebrationString, color, status];
+  List<Object?> get props => [$$typename, id, prompt, behavior, celebration];
   @override
   Map<String, dynamic> toJson() => _$AllHabits$Query$HabitTypeToJson(this);
 }
@@ -57,12 +55,19 @@ class CreateHabit$Mutation$CreateHabit$HabitType extends JsonSerializable
           Map<String, dynamic> json) =>
       _$CreateHabit$Mutation$CreateHabit$HabitTypeFromJson(json);
 
-  String? habitString;
+  @JsonKey(name: '__typename')
+  String? $$typename;
 
-  String? celebrationString;
+  late String id;
+
+  late String prompt;
+
+  late String behavior;
+
+  late String celebration;
 
   @override
-  List<Object?> get props => [habitString, celebrationString];
+  List<Object?> get props => [$$typename, id, prompt, behavior, celebration];
   @override
   Map<String, dynamic> toJson() =>
       _$CreateHabit$Mutation$CreateHabit$HabitTypeToJson(this);
@@ -101,42 +106,64 @@ class CreateHabit$Mutation extends JsonSerializable with EquatableMixin {
   Map<String, dynamic> toJson() => _$CreateHabit$MutationToJson(this);
 }
 
-enum HabitsHabitColorChoices {
-  @JsonValue('BLUE')
-  blue,
-  @JsonValue('GRAY')
-  gray,
-  @JsonValue('GREEN')
-  green,
-  @JsonValue('INDIGO')
-  indigo,
-  @JsonValue('LIGHTBLUE')
-  lightblue,
-  @JsonValue('ORANGE')
-  orange,
-  @JsonValue('PINK')
-  pink,
-  @JsonValue('RED')
-  red,
-  @JsonValue('VIOLET')
-  violet,
-  @JsonValue('YELLOW')
-  yellow,
-  @JsonValue('ARTEMIS_UNKNOWN')
-  artemisUnknown,
+@JsonSerializable(explicitToJson: true)
+class EditHabit$Mutation$UpdateHabit$HabitType extends JsonSerializable
+    with EquatableMixin {
+  EditHabit$Mutation$UpdateHabit$HabitType();
+
+  factory EditHabit$Mutation$UpdateHabit$HabitType.fromJson(
+          Map<String, dynamic> json) =>
+      _$EditHabit$Mutation$UpdateHabit$HabitTypeFromJson(json);
+
+  @JsonKey(name: '__typename')
+  String? $$typename;
+
+  late String id;
+
+  late String prompt;
+
+  late String behavior;
+
+  late String celebration;
+
+  @override
+  List<Object?> get props => [$$typename, id, prompt, behavior, celebration];
+  @override
+  Map<String, dynamic> toJson() =>
+      _$EditHabit$Mutation$UpdateHabit$HabitTypeToJson(this);
 }
-enum HabitsHabitStatusChoices {
-  @JsonValue('FOCUSED')
-  focused,
-  @JsonValue('INACTIVE')
-  inactive,
-  @JsonValue('INTEGRATED')
-  integrated,
-  @JsonValue('REWORK')
-  rework,
-  @JsonValue('ARTEMIS_UNKNOWN')
-  artemisUnknown,
+
+@JsonSerializable(explicitToJson: true)
+class EditHabit$Mutation$UpdateHabit extends JsonSerializable
+    with EquatableMixin {
+  EditHabit$Mutation$UpdateHabit();
+
+  factory EditHabit$Mutation$UpdateHabit.fromJson(Map<String, dynamic> json) =>
+      _$EditHabit$Mutation$UpdateHabitFromJson(json);
+
+  EditHabit$Mutation$UpdateHabit$HabitType? habit;
+
+  @override
+  List<Object?> get props => [habit];
+  @override
+  Map<String, dynamic> toJson() => _$EditHabit$Mutation$UpdateHabitToJson(this);
 }
+
+@JsonSerializable(explicitToJson: true)
+class EditHabit$Mutation extends JsonSerializable with EquatableMixin {
+  EditHabit$Mutation();
+
+  factory EditHabit$Mutation.fromJson(Map<String, dynamic> json) =>
+      _$EditHabit$MutationFromJson(json);
+
+  EditHabit$Mutation$UpdateHabit? updateHabit;
+
+  @override
+  List<Object?> get props => [updateHabit];
+  @override
+  Map<String, dynamic> toJson() => _$EditHabit$MutationToJson(this);
+}
+
 final ALL_HABITS_QUERY_DOCUMENT = DocumentNode(definitions: [
   OperationDefinitionNode(
       type: OperationType.query,
@@ -151,31 +178,31 @@ final ALL_HABITS_QUERY_DOCUMENT = DocumentNode(definitions: [
             directives: [],
             selectionSet: SelectionSetNode(selections: [
               FieldNode(
+                  name: NameNode(value: '__typename'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null),
+              FieldNode(
                   name: NameNode(value: 'id'),
                   alias: null,
                   arguments: [],
                   directives: [],
                   selectionSet: null),
               FieldNode(
-                  name: NameNode(value: 'habitString'),
+                  name: NameNode(value: 'prompt'),
                   alias: null,
                   arguments: [],
                   directives: [],
                   selectionSet: null),
               FieldNode(
-                  name: NameNode(value: 'celebrationString'),
+                  name: NameNode(value: 'behavior'),
                   alias: null,
                   arguments: [],
                   directives: [],
                   selectionSet: null),
               FieldNode(
-                  name: NameNode(value: 'color'),
-                  alias: null,
-                  arguments: [],
-                  directives: [],
-                  selectionSet: null),
-              FieldNode(
-                  name: NameNode(value: 'status'),
+                  name: NameNode(value: 'celebration'),
                   alias: null,
                   arguments: [],
                   directives: [],
@@ -277,13 +304,31 @@ final CREATE_HABIT_MUTATION_DOCUMENT = DocumentNode(definitions: [
                   directives: [],
                   selectionSet: SelectionSetNode(selections: [
                     FieldNode(
-                        name: NameNode(value: 'habitString'),
+                        name: NameNode(value: '__typename'),
                         alias: null,
                         arguments: [],
                         directives: [],
                         selectionSet: null),
                     FieldNode(
-                        name: NameNode(value: 'celebrationString'),
+                        name: NameNode(value: 'id'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'prompt'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'behavior'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'celebration'),
                         alias: null,
                         arguments: [],
                         directives: [],
@@ -311,4 +356,146 @@ class CreateHabitMutation
   @override
   CreateHabit$Mutation parse(Map<String, dynamic> json) =>
       CreateHabit$Mutation.fromJson(json);
+}
+
+@JsonSerializable(explicitToJson: true)
+class EditHabitArguments extends JsonSerializable with EquatableMixin {
+  EditHabitArguments(
+      {required this.id,
+      required this.prompt,
+      required this.behavior,
+      required this.celebration});
+
+  @override
+  factory EditHabitArguments.fromJson(Map<String, dynamic> json) =>
+      _$EditHabitArgumentsFromJson(json);
+
+  late String id;
+
+  late String prompt;
+
+  late String behavior;
+
+  late String celebration;
+
+  @override
+  List<Object?> get props => [id, prompt, behavior, celebration];
+  @override
+  Map<String, dynamic> toJson() => _$EditHabitArgumentsToJson(this);
+}
+
+final EDIT_HABIT_MUTATION_DOCUMENT = DocumentNode(definitions: [
+  OperationDefinitionNode(
+      type: OperationType.mutation,
+      name: NameNode(value: 'EditHabit'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+            variable: VariableNode(name: NameNode(value: 'id')),
+            type: NamedTypeNode(name: NameNode(value: 'ID'), isNonNull: true),
+            defaultValue: DefaultValueNode(value: null),
+            directives: []),
+        VariableDefinitionNode(
+            variable: VariableNode(name: NameNode(value: 'prompt')),
+            type:
+                NamedTypeNode(name: NameNode(value: 'String'), isNonNull: true),
+            defaultValue: DefaultValueNode(value: null),
+            directives: []),
+        VariableDefinitionNode(
+            variable: VariableNode(name: NameNode(value: 'behavior')),
+            type:
+                NamedTypeNode(name: NameNode(value: 'String'), isNonNull: true),
+            defaultValue: DefaultValueNode(value: null),
+            directives: []),
+        VariableDefinitionNode(
+            variable: VariableNode(name: NameNode(value: 'celebration')),
+            type:
+                NamedTypeNode(name: NameNode(value: 'String'), isNonNull: true),
+            defaultValue: DefaultValueNode(value: null),
+            directives: [])
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(selections: [
+        FieldNode(
+            name: NameNode(value: 'updateHabit'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                  name: NameNode(value: 'habitData'),
+                  value: ObjectValueNode(fields: [
+                    ObjectFieldNode(
+                        name: NameNode(value: 'id'),
+                        value: VariableNode(name: NameNode(value: 'id'))),
+                    ObjectFieldNode(
+                        name: NameNode(value: 'prompt'),
+                        value: VariableNode(name: NameNode(value: 'prompt'))),
+                    ObjectFieldNode(
+                        name: NameNode(value: 'behavior'),
+                        value: VariableNode(name: NameNode(value: 'behavior'))),
+                    ObjectFieldNode(
+                        name: NameNode(value: 'celebration'),
+                        value:
+                            VariableNode(name: NameNode(value: 'celebration')))
+                  ]))
+            ],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FieldNode(
+                  name: NameNode(value: 'habit'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: SelectionSetNode(selections: [
+                    FieldNode(
+                        name: NameNode(value: '__typename'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'id'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'prompt'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'behavior'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'celebration'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null)
+                  ]))
+            ]))
+      ]))
+]);
+
+class EditHabitMutation
+    extends GraphQLQuery<EditHabit$Mutation, EditHabitArguments> {
+  EditHabitMutation({required this.variables});
+
+  @override
+  final DocumentNode document = EDIT_HABIT_MUTATION_DOCUMENT;
+
+  @override
+  final String operationName = 'EditHabit';
+
+  @override
+  final EditHabitArguments variables;
+
+  @override
+  List<Object?> get props => [document, operationName, variables];
+  @override
+  EditHabit$Mutation parse(Map<String, dynamic> json) =>
+      EditHabit$Mutation.fromJson(json);
 }

@@ -2,10 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:habit_master/graphql/habits_graphql_api.graphql.dart';
 
-class CreateEditHabitPage extends StatefulWidget {
-  final String? habitId;
+class CreateEditHabitScreenArguments {
+  final AllHabits$Query$HabitType habit;
+  final Refetch? refetch;
 
-  const CreateEditHabitPage({Key? key, this.habitId}) : super(key: key);
+  CreateEditHabitScreenArguments(this.habit, this.refetch);
+}
+
+class CreateEditHabitPage extends StatefulWidget {
+  static const routeNameAdd = '/new-habit';
+  static const routeNameEdit =
+      '/edit-habit'; // how to use id in url? I'd habits/<id>/edit
+
+  final AllHabits$Query$HabitType? habit;
+  final Refetch? refetch;
+
+  const CreateEditHabitPage({Key? key, this.habit, required this.refetch})
+      : super(key: key);
 
   @override
   _CreateEditHabitPageState createState() => _CreateEditHabitPageState();
@@ -23,26 +36,53 @@ class _CreateEditHabitPageState extends State<CreateEditHabitPage> {
   @override
   void initState() {
     super.initState();
-    _isCreateMode = widget.habitId?.isEmpty ?? true;
+    _isCreateMode = widget.habit == null;
+    if (!_isCreateMode) {
+      _promptController.value = TextEditingValue(text: widget.habit!.prompt);
+      _behaviorController.value =
+          TextEditingValue(text: widget.habit!.behavior);
+      _celebrationController.value =
+          TextEditingValue(text: widget.habit!.celebration);
+    }
   }
+
+  Map<String, dynamic> expectedResult(bool isCreating) => <String, dynamic>{
+        "updateHabit": {
+          "habit": {
+            "__typename": "HabitType",
+            "id": isCreating ? "temp-id" : widget.habit!.id,
+            "prompt": _promptController.text,
+            "behavior": _behaviorController.text,
+            "celebration": _celebrationController.text,
+          }
+        }
+      };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Mutation(
       options: MutationOptions(
-        document: CreateHabitMutation(
-                variables: CreateHabitArguments(
-                    prompt: _promptController.text,
-                    behavior: _behaviorController.text,
-                    celebration: _celebrationController.text))
-            .document,
-        onCompleted: (data) => Navigator.pop(context, true),
-      ),
-      builder: (MultiSourceResult Function(Map<String, dynamic>,
-                  {Object? optimisticResult})
-              runMutation,
-          QueryResult? result) {
+          document: _isCreateMode
+              ? CreateHabitMutation(
+                      variables: CreateHabitArguments(
+                          prompt: _promptController.text,
+                          behavior: _behaviorController.text,
+                          celebration: _celebrationController.text))
+                  .document
+              : EditHabitMutation(
+                      variables: EditHabitArguments(
+                          id: widget.habit!.id,
+                          prompt: _promptController.text,
+                          behavior: _behaviorController.text,
+                          celebration: _celebrationController.text))
+                  .document,
+          onCompleted: (data) {
+            print(data);
+            widget.refetch!();
+            Navigator.pop(context, true);
+          }),
+      builder: (RunMutation runMutation, QueryResult? result) {
         if (result!.hasException) {
           return Text(result.exception.toString());
         }
@@ -56,7 +96,7 @@ class _CreateEditHabitPageState extends State<CreateEditHabitPage> {
     ));
   }
 
-  Widget _buildForm(Function runMutation) {
+  Widget _buildForm(RunMutation runMutation) {
     return Form(
         key: _formKey,
         child: Padding(
@@ -117,12 +157,14 @@ class _CreateEditHabitPageState extends State<CreateEditHabitPage> {
                           setState(() {
                             _isSaving = true;
                           });
-
                           runMutation({
-                            'prompt': _promptController.text,
-                            'behavior': _behaviorController.text,
-                            'celebration': _celebrationController.text,
-                          });
+                            ..._isCreateMode ? {} : {'id': widget.habit!.id},
+                            ...{
+                              'prompt': _promptController.text,
+                              'behavior': _behaviorController.text,
+                              'celebration': _celebrationController.text,
+                            },
+                          }, optimisticResult: expectedResult(_isCreateMode));
                         }
                       },
                       child: Padding(

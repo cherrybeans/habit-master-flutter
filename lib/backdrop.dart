@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:habit_master/colors.dart';
 
 import 'login.page.dart';
 import 'model/model.dart';
@@ -12,6 +13,7 @@ class Backdrop extends StatefulWidget {
   final Widget backLayer;
   final Widget frontTitle;
   final Widget backTitle;
+  final Widget? floatingActionButton;
 
   const Backdrop({
     required this.currentCategory,
@@ -19,6 +21,7 @@ class Backdrop extends StatefulWidget {
     required this.backLayer,
     required this.frontTitle,
     required this.backTitle,
+    this.floatingActionButton,
   });
 
   @override
@@ -225,8 +228,6 @@ class _BackdropState extends State<Backdrop>
       systemOverlayStyle: SystemUiOverlayStyle.light,
       elevation: 0.0,
       titleSpacing: 0.0,
-      leadingWidth: 0,
-      leading: Container(),
       title: _BackdropTitle(
         listenable: _controller.view,
         onPress: _toggleBackdropLayerVisibility,
@@ -270,28 +271,83 @@ class _BackdropState extends State<Backdrop>
               icon: Icon(Icons.menu),
               onPressed: () {
                 //_scaffoldKey.currentState!.openDrawer();
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      height: 200,
-                      color: Colors.amber,
-                      child: Center(
+                showModalBottomSheet(
+                    context: context,
+                    barrierColor: Colors.black.withOpacity(0.5),
+                    builder: (BuildContext context) {
+                      return Container(
+                        color: Colors.black.withOpacity(0.5),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
-                            const Text('Modal BottomSheet'),
-                            ElevatedButton(
-                              child: const Text('Close BottomSheet'),
-                              onPressed: () => Navigator.pop(context),
+                            SizedBox(
+                                height: (56 * 3).toDouble(),
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(16.0),
+                                        topRight: Radius.circular(16.0),
+                                      ),
+                                      color:
+                                          Theme.of(context).bottomAppBarColor,
+                                    ),
+                                    child: Stack(
+                                      alignment: Alignment(0, 0),
+                                      children: <Widget>[
+                                        Positioned(
+                                          child: ListView(
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            children: <Widget>[
+                                              ListTile(
+                                                title: Text(
+                                                  "Login",
+                                                ),
+                                                leading: Icon(Icons.inbox,
+                                                    color: kHabitBrown900),
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            LoginPage()),
+                                                  );
+                                                },
+                                              ),
+                                              ListTile(
+                                                leading: Icon(Icons.all_inbox,
+                                                    color: kHabitBrown900),
+                                                title: Text(
+                                                  'All habits',
+                                                ),
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              ListTile(
+                                                leading: Icon(
+                                                    Icons.center_focus_strong,
+                                                    color: kHabitBrown900),
+                                                title: Text('Focused'),
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ))),
+                            Container(
+                              height: 10,
+                              color: kHabitPink100,
                             )
                           ],
                         ),
-                      ),
-                    );
-                  },
-                );
+                      );
+                    });
               }),
           Spacer(),
           IconButton(icon: Icon(Icons.search), onPressed: () {}),
@@ -300,44 +356,11 @@ class _BackdropState extends State<Backdrop>
       ),
     );
 
-    var drawer = Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      color: Colors.white,
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            decoration:
-                BoxDecoration(color: Theme.of(context).colorScheme.primary),
-            child: Text(
-              'Habit Master',
-              style: Theme.of(context).textTheme.headline5,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.all_inbox),
-            title: Text('All habits'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.center_focus_strong),
-            title: Text('Focused'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
-
     return Scaffold(
       appBar: appBar,
-      key: _scaffoldKey,
       bottomNavigationBar: bottomAppBar,
+      floatingActionButton: widget.floatingActionButton,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       //drawer: drawer,
       body: LayoutBuilder(builder: _buildStack),
     );

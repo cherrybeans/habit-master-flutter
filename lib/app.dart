@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:habit_master/category_menu.page.dart';
+import 'package:habit_master/create-edit-habit.page.dart';
 import 'package:habit_master/home.page.dart';
 
 import 'backdrop.dart';
@@ -33,21 +34,63 @@ class _HabitsAppState extends State<HabitsApp> {
         child: MaterialApp(
           title: 'Habit Master',
           theme: _kHabitTheme,
-          home: Backdrop(
-            currentCategory: _currentCategory,
-            frontLayer: HomePage(category: _currentCategory),
-            backLayer: CategoryMenuPage(
-                currentCategory: _currentCategory,
-                onCategoryTap: _onCategoryTap),
-            frontTitle: Text('HABIT MASTER'),
-            backTitle: Text('MENU'),
-          ),
+          home: Builder(
+              builder: (context) => Backdrop(
+                    currentCategory: _currentCategory,
+                    frontLayer: HomePage(category: _currentCategory),
+                    backLayer: CategoryMenuPage(
+                        currentCategory: _currentCategory,
+                        onCategoryTap: _onCategoryTap),
+                    frontTitle: Text('HABIT MASTER'),
+                    backTitle: Text('MENU'),
+                    floatingActionButton: FloatingActionButton(
+                        child: Icon(Icons.add),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(CreateEditHabitPage.routeNameAdd);
+                        }),
+                  )),
           initialRoute: '/login',
           onGenerateRoute: _getRoute,
         ));
   }
 
   Route<dynamic>? _getRoute(RouteSettings settings) {
+    if (settings.name == CreateEditHabitPage.routeNameAdd) {
+      final args = settings.arguments as CreateEditHabitScreenArguments;
+
+      return MaterialPageRoute(
+        builder: (context) {
+          return Backdrop(
+            currentCategory: _currentCategory,
+            frontLayer: CreateEditHabitPage(refetch: args.refetch),
+            backLayer: CategoryMenuPage(
+                currentCategory: _currentCategory,
+                onCategoryTap: _onCategoryTap),
+            frontTitle: Text('CREATE HABIT'),
+            backTitle: Text('MENU'),
+          );
+        },
+      );
+    }
+    if (settings.name == CreateEditHabitPage.routeNameEdit) {
+      final args = settings.arguments as CreateEditHabitScreenArguments;
+      return MaterialPageRoute(
+        builder: (context) {
+          return Backdrop(
+            currentCategory: _currentCategory,
+            frontLayer:
+                CreateEditHabitPage(habit: args.habit, refetch: args.refetch),
+            backLayer: CategoryMenuPage(
+                currentCategory: _currentCategory,
+                onCategoryTap: _onCategoryTap),
+            frontTitle: Text('EDIT HABIT'),
+            backTitle: Text('MENU'),
+          );
+        },
+      );
+    }
+
     if (settings.name != '/login') {
       return null;
     }

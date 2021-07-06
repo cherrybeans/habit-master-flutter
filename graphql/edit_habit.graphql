@@ -1,0 +1,12 @@
+mutation EditHabit($id: ID!, $prompt: String!, $behavior: String!, $celebration: String!){
+    updateHabit(habitData: {id: $id, prompt: $prompt, behavior: $behavior, celebration: $celebration})
+    {
+        habit {
+            __typename
+            id
+            prompt
+            behavior
+            celebration
+        }
+    }
+}

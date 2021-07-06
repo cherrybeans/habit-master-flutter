@@ -2,8 +2,11 @@ mutation CreateHabit($prompt: String!, $behavior: String!, $celebration: String!
     createHabit(habitData: {prompt: $prompt, behavior: $behavior, celebration: $celebration})
     {
         habit {
-            habitString
-            celebrationString
+            __typename
+            id
+            prompt
+            behavior
+            celebration
         }
     }
 }
