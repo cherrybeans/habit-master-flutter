@@ -43,12 +43,6 @@ class _HabitsAppState extends State<HabitsApp> {
                         onCategoryTap: _onCategoryTap),
                     frontTitle: Text('HABIT MASTER'),
                     backTitle: Text('MENU'),
-                    floatingActionButton: FloatingActionButton(
-                        child: Icon(Icons.add),
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushNamed(CreateEditHabitPage.routeNameAdd);
-                        }),
                   )),
           initialRoute: '/login',
           onGenerateRoute: _getRoute,

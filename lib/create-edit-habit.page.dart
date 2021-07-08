@@ -3,7 +3,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:habit_master/graphql/habits_graphql_api.graphql.dart';
 
 class CreateEditHabitScreenArguments {
-  final AllHabits$Query$HabitType habit;
+  final AllHabits$Query$HabitType? habit;
   final Refetch? refetch;
 
   CreateEditHabitScreenArguments(this.habit, this.refetch);
@@ -104,6 +104,7 @@ class _CreateEditHabitPageState extends State<CreateEditHabitPage> {
           child: ListView(
             children: <Widget>[
               SizedBox(height: 12),
+              Text("After I "),
               TextFormField(
                 controller: _promptController,
                 decoration: InputDecoration(
@@ -117,8 +118,10 @@ class _CreateEditHabitPageState extends State<CreateEditHabitPage> {
                 },
               ),
               SizedBox(height: 24),
+              Text(", I will "),
               TextFormField(
                 controller: _behaviorController,
+                autofocus: true,
                 decoration: InputDecoration(
                   labelText: "Behavior",
                 ),
@@ -130,6 +133,7 @@ class _CreateEditHabitPageState extends State<CreateEditHabitPage> {
                 },
               ),
               SizedBox(height: 24),
+              Text(". Then I will celebrate by "),
               TextFormField(
                 controller: _celebrationController,
                 decoration: InputDecoration(
@@ -143,40 +147,40 @@ class _CreateEditHabitPageState extends State<CreateEditHabitPage> {
                 },
               ),
               SizedBox(height: 24),
-              _isSaving
-                  ? SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 3,
-                      ),
-                    )
-                  : ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            _isSaving = true;
-                          });
-                          runMutation({
-                            ..._isCreateMode ? {} : {'id': widget.habit!.id},
-                            ...{
-                              'prompt': _promptController.text,
-                              'behavior': _behaviorController.text,
-                              'celebration': _celebrationController.text,
-                            },
-                          }, optimisticResult: expectedResult(_isCreateMode));
-                        }
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      _isSaving = true;
+                    });
+                    runMutation({
+                      ..._isCreateMode ? {} : {'id': widget.habit!.id},
+                      ...{
+                        'prompt': _promptController.text,
+                        'behavior': _behaviorController.text,
+                        'celebration': _celebrationController.text,
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 36,
-                          vertical: 12,
-                        ),
-                        child: Text(
+                    }, optimisticResult: expectedResult(_isCreateMode));
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 36,
+                    vertical: 12,
+                  ),
+                  child: _isSaving
+                      ? SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3,
+                          ),
+                        )
+                      : Text(
                           _isCreateMode ? "CREATE" : "SAVE",
                         ),
-                      ),
-                    ),
+                ),
+              ),
             ],
           ),
         ));

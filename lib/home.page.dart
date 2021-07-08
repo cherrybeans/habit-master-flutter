@@ -1,6 +1,6 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:habit_master/ui-components.dart';
 
 import 'create-edit-habit.page.dart';
 import 'graphql/habits_graphql_api.graphql.dart';
@@ -16,14 +16,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _saved = <WordPair>{};
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _habits = <AllHabits$Query$HabitType?>[];
+  var _refetch;
 
   @override
   void initState() {
     super.initState();
-    _habits.addAll([]); // Find out how to run graphql query to get data
   }
 
   @override
@@ -31,6 +30,16 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
+      bottomNavigationBar: bottomAppBar(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.of(context).pushNamed(
+              CreateEditHabitPage.routeNameAdd,
+              arguments: CreateEditHabitScreenArguments(null, _refetch),
+            );
+          }),
       // TODO: Filter habits by status chosen (category)
       body: _buildList(),
     );
@@ -40,11 +49,15 @@ class _HomePageState extends State<HomePage> {
     return Query(
       options: QueryOptions(
         document: AllHabitsQuery().document,
-        fetchPolicy: FetchPolicy.networkOnly,
+        fetchPolicy: FetchPolicy.cacheAndNetwork,
+        pollInterval: Duration(minutes: 5),
       ),
       builder: (result, {fetchMore, refetch}) {
         if (result.hasException) {
-          return Text(result.exception.toString());
+          return Padding(
+            child: Text(result.exception.toString()),
+            padding: const EdgeInsets.all(16.0),
+          );
         }
 
         if (result.isLoading) {
@@ -52,7 +65,7 @@ class _HomePageState extends State<HomePage> {
             child: CircularProgressIndicator(),
           );
         }
-
+        _refetch = refetch;
         _habits.clear();
         var res = AllHabits$Query.fromJson(result.data!).allHabits;
         _habits.addAll(res!);
